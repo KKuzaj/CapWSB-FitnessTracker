@@ -27,6 +27,16 @@ class UserServiceImpl implements UserService, UserProvider {
     }
 
     @Override
+    public User updateUser(final Long id, final User user) {
+        log.info("Updating User id: {} with data: {}", id, user);
+        if (id == null) {
+            throw new IllegalArgumentException("User does not exist, update is not permitted!");
+        }
+        user.setId(id);
+        return userRepository.save(user);
+    }
+
+    @Override
     public Optional<User> getUser(final Long userId) {
         return userRepository.findById(userId);
     }
@@ -34,6 +44,11 @@ class UserServiceImpl implements UserService, UserProvider {
     @Override
     public Optional<User> getUserByEmail(final String email) {
         return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public List<User> findUsersByEmailLike(final String email) {
+        return userRepository.findByEmailLike(email);
     }
 
     @Override

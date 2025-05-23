@@ -3,8 +3,10 @@ package pl.wsb.fitnesstracker.user.internal;
 import org.springframework.data.jpa.repository.JpaRepository;
 import pl.wsb.fitnesstracker.user.api.User;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 interface UserRepository extends JpaRepository<User, Long> {
 
@@ -18,6 +20,18 @@ interface UserRepository extends JpaRepository<User, Long> {
         return findAll().stream()
                 .filter(user -> Objects.equals(user.getEmail(), email))
                 .findFirst();
+    }
+
+    /**
+     * Query searching users by email address. It matches by email containing ignoring letters case.
+     *
+     * @param email email of the user to search
+     * @return List
+     */
+    default List<User> findByEmailLike(String email) {
+        return findAll().stream()
+                .filter(user -> user.getEmail().toLowerCase().contains(email.toLowerCase()))
+                .toList();
     }
 
 }
