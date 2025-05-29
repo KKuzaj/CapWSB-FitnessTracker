@@ -2,7 +2,7 @@ package pl.wsb.fitnesstracker.user.internal;
 
 import org.springframework.stereotype.Component;
 import pl.wsb.fitnesstracker.user.api.User;
-import pl.wsb.fitnesstracker.user.api.UsersimpleDto;
+
 @Component
 class UserMapper {
 
@@ -14,8 +14,8 @@ class UserMapper {
                 user.getEmail());
     }
 
-    SimpleUserDto toSimpleDto(User user) {
-        return new SimpleUserDto(user.getId(),
+    UserSimpleDto toSimpleDto(User user) {
+        return new UserSimpleDto(user.getId(),
                 user.getFirstName(),
                 user.getLastName()
         );
@@ -32,5 +32,7 @@ class UserMapper {
                 userDto.birthdate(),
                 userDto.email());
     }
+
+
 
 }

@@ -7,6 +7,7 @@ import pl.wsb.fitnesstracker.user.api.User;
 import pl.wsb.fitnesstracker.user.api.UserProvider;
 import pl.wsb.fitnesstracker.user.api.UserService;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +17,8 @@ import java.util.Optional;
 class UserServiceImpl implements UserService, UserProvider {
 
     private final UserRepository userRepository;
+
+    private final UserMapper userMapper;
 
     @Override
     public User createUser(final User user) {
@@ -29,8 +32,8 @@ class UserServiceImpl implements UserService, UserProvider {
     @Override
     public User updateUser(final Long id, final User user) {
         log.info("Updating User id: {} with data: {}", id, user);
-        if (id == null) {
-            throw new IllegalArgumentException("User does not exist, update is not permitted!");
+        if (!userRepository.existsById(id)) {
+            throw new UserNotFoundException("User with id " + id + " not found");
         }
         user.setId(id);
         return userRepository.save(user);
@@ -56,4 +59,15 @@ class UserServiceImpl implements UserService, UserProvider {
         return userRepository.findAll();
     }
 
+    public User addUser(UserDto userDto) {
+        User user = userMapper.toEntity(userDto);
+        return userRepository.save(user);
+    }
+    @Override
+    public void deleteUser(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new UserNotFoundException("User with id " + id + " not found");
+        }
+        userRepository.deleteById(id);
+    }
 }
