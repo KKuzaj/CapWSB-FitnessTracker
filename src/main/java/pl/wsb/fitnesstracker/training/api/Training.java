@@ -55,4 +55,7 @@ public class Training {
         this.distance = distance;
         this.averageSpeed = averageSpeed;
     }
+
+    public void setId(Long id) {
+    }
 }
